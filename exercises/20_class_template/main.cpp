@@ -35,30 +35,27 @@ struct Tensor4D {
         // TODO: 实现单向广播的加法
         constexpr unsigned DIM = 4;
         unsigned size = 1;
-        bool need2Bcst[DIM]{false};
         for (unsigned i = 0; i < DIM; i++) {
             size *= shape[i];
             if (shape[i] != others.shape[i] && others.shape[i] != 1) {
                 ASSERT(false, "Unable to broadcast.")
-            } else {
-                need2Bcst[i] = shape[i] != others.shape[i];
             }
         }
 
-        unsigned index[DIM]{0};
+        unsigned indices[DIM]{0};
         for (unsigned i = 0; i < size; i++) {
             unsigned others_i = 0;
             for (unsigned j = 0; j < DIM; j++) {
                 others_i *= others.shape[j];
-                if (!need2Bcst[j]) {
-                    others_i += index[j];
+                if (shape[j] == others.shape[j]) {
+                    others_i += indices[j];
                 }
             }
             data[i] += others.data[others_i];
-            index[DIM - 1] += 1;
-            for (unsigned j = DIM - 1; index[j] == shape[j] && j >= 1; j--) {
-                index[j] = 0;
-                index[j - 1] += 1;
+            indices[DIM - 1] += 1;
+            for (unsigned j = DIM - 1; indices[j] == shape[j] && j >= 1; j--) {
+                indices[j] = 0;
+                indices[j - 1] += 1;
             }
         }
 
