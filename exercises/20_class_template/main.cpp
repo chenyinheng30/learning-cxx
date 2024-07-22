@@ -49,8 +49,10 @@ struct Tensor4D {
         for (unsigned i = 0; i < size; i++) {
             unsigned others_i = 0;
             for (unsigned j = 0; j < DIM; j++) {
-                auto others_index = need2Bcst[j] ? 0 : index[j];
-                others_i = others_i * others.shape[j] + others_index;
+                others_i *= others.shape[j];
+                if (!need2Bcst[j]) {
+                    others_i += index[j];
+                }
             }
             data[i] += others.data[others_i];
             index[DIM - 1] += 1;
