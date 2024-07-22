@@ -2,16 +2,6 @@
 
 // READ: 派生类 <https://zh.cppreference.com/w/cpp/language/derived_class>
 
-// 三个类型的定义在下方，它们的关系是：B 派生自 A 并包含一个 X 类型的成员。
-
-// ↓↓↓ 这是声明
-struct X;
-struct A;
-struct B;
-// ↑↑↑ 这是声明
-
-// ↓↓↓ 这是定义
-
 struct X {
     int x;
 
