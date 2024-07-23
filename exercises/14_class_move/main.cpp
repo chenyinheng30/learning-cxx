@@ -1,5 +1,4 @@
 #include "../exercise.h"
-#include <cstddef>
 
 // READ: 移动构造函数 <https://zh.cppreference.com/w/cpp/language/move_constructor>
 // READ: 移动赋值 <https://zh.cppreference.com/w/cpp/language/move_assignment>
@@ -24,9 +23,10 @@ public:
     // TODO: 实现移动赋值
     // NOTICE: ⚠ 注意移动到自身问题 ⚠
     DynFibonacci &operator=(DynFibonacci &&other) {
-        this->cache = other.cache;
-        this->cached = other.cached;
         if (other.cache != this->cache) {
+            delete[] this->cache;
+            this->cache = other.cache;
+            this->cached = other.cached;
             other.cache = nullptr;
         }
         return *this;
@@ -34,9 +34,7 @@ public:
 
     // TODO: 实现析构器，释放缓存空间
     ~DynFibonacci() {
-        if (cache != nullptr) {
-            delete[] cache;
-        }
+        delete[] cache;
     }
 
     // TODO: 实现正确的缓存优化斐波那契计算
